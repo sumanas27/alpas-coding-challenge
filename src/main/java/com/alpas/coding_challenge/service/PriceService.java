@@ -18,14 +18,12 @@ import com.alpas.coding_challenge.bo.AveragePriceRecord;
 import com.alpas.coding_challenge.bo.Price;
 import com.alpas.coding_challenge.bo.PriceRecord;
 
-import lombok.RequiredArgsConstructor;
-
 
 @Service
-@RequiredArgsConstructor
 public class PriceService {
 
     private final ConcurrentLinkedQueue<PriceRecord> priceRecordQueue = new ConcurrentLinkedQueue<>();
+
     public Price record( double price ) {
         PriceRecord record = new PriceRecord( price, now() );
         priceRecordQueue.add( record );
