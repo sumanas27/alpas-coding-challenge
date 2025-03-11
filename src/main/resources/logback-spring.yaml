@@ -1,0 +1,42 @@
+configuration:
+  status: WARN
+
+  # Define variables (log directory, file name)
+  property:
+    - name: LOG_DIR
+      value: logs
+    - name: LOG_FILE
+      value: app.log
+
+  # Console Appender (Logs output to the console)
+  appender:
+    - name: CONSOLE
+      class: ch.qos.logback.core.ConsoleAppender
+      encoder:
+        pattern: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+    # File Appender (Logs output to a file)
+    - name: FILE
+      class: ch.qos.logback.core.rolling.RollingFileAppender
+      file: ${LOG_DIR}/${LOG_FILE}
+      encoder:
+        pattern: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+      rollingPolicy:
+        class: ch.qos.logback.core.rolling.TimeBasedRollingPolicy
+        fileNamePattern: "${LOG_DIR}/app-%d{yyyy-MM-dd}.log"
+        maxHistory: 7
+        totalSizeCap: 100MB
+
+  # Root Logger (Logs everything at INFO level)
+  root:
+    level: INFO
+    appender-ref:
+      - ref: CONSOLE
+      - ref: FILE
+
+  # Custom Log Levels (Override specific packages)
+  logger:
+    - name: org.springframework
+      level: WARN
+    - name: com.alpas.coding_challenge.SumanasahaCodingChallengeApplication
+      level: DEBUG

@@ -8,8 +8,8 @@ COPY . /app
 # Packaging the application code
 RUN ./gradlew clean build
 
-# Second stage of the build will use eclipse-temurin:21-jdk image
-FROM eclipse-temurin:21-jdk
+# Second stage of the build will use openjdk:21-jdk-slim image for reduced overall image size
+FROM openjdk:21-jdk-slim
 
 # Copying only the artifacts from the first stage and discarding the rest
 COPY --from=builder /app/build/libs/alpas-coding-challenge-0.0.1-SNAPSHOT.jar /app.jar

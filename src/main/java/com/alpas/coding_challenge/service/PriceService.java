@@ -18,8 +18,11 @@ import com.alpas.coding_challenge.bo.AveragePriceRecord;
 import com.alpas.coding_challenge.bo.Price;
 import com.alpas.coding_challenge.bo.PriceRecord;
 
+import lombok.extern.slf4j.Slf4j;
+
 
 @Service
+@Slf4j
 public class PriceService {
 
     private final ConcurrentLinkedQueue<PriceRecord> priceRecordQueue = new ConcurrentLinkedQueue<>();
@@ -27,6 +30,8 @@ public class PriceService {
     public Price record( double price ) {
         PriceRecord record = new PriceRecord( price, now() );
         priceRecordQueue.add( record );
+
+        log.info( "Price {} is recorded successfully", price );
         return new Price( record.price() );
     }
 
@@ -36,18 +41,29 @@ public class PriceService {
                 .collect( toList() );
     }
 
-    public List<AveragePriceRecord> averagePrices(){
+    public List<AveragePriceRecord> averagePrices() {
+        log.info( "Starting calculation of average prices..." );
 
-        Instant thirtySecondsAgo = now().minus( DATA_RETENTION_SECONDS, SECONDS);
+        Instant thirtySecondsAgo = now().minus( DATA_RETENTION_SECONDS, SECONDS );
+        log.debug("Filtering records older than: {}", thirtySecondsAgo);
+
         // Remove old records
-        priceRecordQueue.removeIf(record -> record.timestamp().isBefore(thirtySecondsAgo));
+        int initialSize = priceRecordQueue.size();
+        priceRecordQueue.removeIf( record -> record.timestamp().isBefore( thirtySecondsAgo ) );
+        int remainingSize = priceRecordQueue.size();
 
-        return priceRecordQueue.stream()
-                .collect( groupingBy( record -> record.timestamp().truncatedTo( SECONDS),
-                                      averagingDouble(PriceRecord::price)))
+        log.debug( "Removed {} old records. Remaining records: {}",
+                   ( initialSize - remainingSize ), remainingSize );
+
+        // Compute the average prices
+        List<AveragePriceRecord> averages = priceRecordQueue.stream()
+                .collect( groupingBy( record -> record.timestamp().truncatedTo( SECONDS ),
+                                      averagingDouble( PriceRecord::price ) ) )
                 .entrySet().stream()
-                .map(entry -> new AveragePriceRecord(entry.getKey(), entry.getValue()))
-                .sorted((a, b) -> b.timestamp().compareTo(a.timestamp()))
+                .map( entry -> new AveragePriceRecord( entry.getKey(), entry.getValue() ) )
+                .sorted( ( a, b ) -> b.timestamp().compareTo( a.timestamp() ) )
                 .toList();
+        log.info( "Computed {} average price records.", averages.size() );
+        return averages;
     }
 }
