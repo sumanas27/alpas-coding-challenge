@@ -41,7 +41,7 @@ class PriceControllerWebMvcTest {
 
         when(priceService.record(priceValue)).thenReturn(mockPrice);
 
-        mockMvc.perform(post("/prices").param("price", String.valueOf(priceValue)))
+        mockMvc.perform(post("/api/v1/prices").param("price", String.valueOf(priceValue)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.price").value(priceValue));
     }
@@ -55,7 +55,7 @@ class PriceControllerWebMvcTest {
 
         when(priceService.getPrices()).thenReturn(mockRecords);
 
-        mockMvc.perform(get("/"))
+        mockMvc.perform(get("/api/v1/"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].price").value(100.0))
                 .andExpect(jsonPath("$[1].price").value(200.0));
@@ -70,7 +70,7 @@ class PriceControllerWebMvcTest {
 
         when(priceService.averagePrices()).thenReturn(mockAvgRecords);
 
-        mockMvc.perform(get("/average-prices"))
+        mockMvc.perform(get("/api/v1/average-prices"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].avg_price").value(100.0))
                 .andExpect(jsonPath("$[1].avg_price").value(150.0));
