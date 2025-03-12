@@ -38,5 +38,5 @@ configuration:
   logger:
     - name: org.springframework
       level: WARN
-    - name: com.alpas.coding_challenge.SumanasahaCodingChallengeApplication
+    - name: com.alpas.coding_challenge.PriceServiceApplication
       level: DEBUG

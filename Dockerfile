@@ -5,9 +5,6 @@ FROM eclipse-temurin:21-jdk AS builder
 WORKDIR /app
 COPY . /app
 
-# Packaging the application code
-RUN ./gradlew clean build
-
 # Second stage of the build will use openjdk:21-jdk-slim image for reduced overall image size
 FROM openjdk:21-jdk-slim
 

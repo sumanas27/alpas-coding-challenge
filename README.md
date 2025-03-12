@@ -1,7 +1,7 @@
 # alpas-coding-challenge
 
-The Price API service has the responsibility is to record
-price changes and calculate average price for the last 30 seconds. 
+The Price Service Application has the responsibility is to record price changes and 
+calculate average price for the last 30 seconds. 
 
 ### Feature(s)
 - Record Price : To record price with current timestamp this endpoint `/api/v1/prices` is developed.
@@ -14,23 +14,20 @@ More details can be found on Swagger API documentation via /swagger endpoint on 
 - Docker daemon is installed and running
 
 ### Running the service
-The following commands are useful if the service has to run.
+
+The application contains a build script `build.sh`
+
 To ensure smooth build and running processes, a Dockerfile is created in the source code directory.
 
 To build this application following command is necessary:
 
+- Make it executable (only once):
 ```
-docker build -t alpas-coding-challenge .
+chmod +x build.sh
 ``` 
-To run this application following command is necessary
-
+- Run the build script:
 ```
-docker run -p 8080:8080 alpas-coding-challenge
-```
-To ensure that docker image is running, following command will give the overview of the image.
-
-```
-docker ps
+./build.sh
 ```
 
 ### Swagger Documentation

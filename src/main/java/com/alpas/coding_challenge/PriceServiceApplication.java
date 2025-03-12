@@ -9,10 +9,10 @@ import io.swagger.v3.oas.annotations.info.Info;
 
 @OpenAPIDefinition( info = @Info( version = "V1.0.0", title = "Price Service API" ) )
 @SpringBootApplication
-public class SumanasahaCodingChallengeApplication {
+public class PriceServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SumanasahaCodingChallengeApplication.class, args);
+		SpringApplication.run( PriceServiceApplication.class, args);
 	}
 
 }
