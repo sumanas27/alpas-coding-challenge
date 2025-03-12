@@ -1,18 +1,21 @@
-# First stage of the build will use eclipse-temurin:21-jdk parent image
+# Use a builder image
 FROM eclipse-temurin:21-jdk AS builder
 
-# Copy local code to the container image.
+# Set working directory
 WORKDIR /app
 COPY . /app
 
 # Second stage of the build will use openjdk:21-jdk-slim image for reduced overall image size
 FROM openjdk:21-jdk-slim
 
-# Copying only the artifacts from the first stage and discarding the rest
+# Set working directory
+WORKDIR /app
+
+# Copy only the built JAR file from the builder stage
 COPY --from=builder /app/build/libs/alpas-coding-challenge-0.0.1-SNAPSHOT.jar /app.jar
 
-# Expose the port the application runs on
+# Expose the application port
 EXPOSE 8080
 
-# Setting the startup command to execute the jar
-CMD ["java","-jar","/app.jar"]
+# Run the application
+CMD ["java", "-jar", "/app.jar"]

@@ -46,6 +46,7 @@ chmod +x build.sh
 
 This will:
 
+- **Start Makefile** to initiate the following steps
 - **Compile the application** using Gradle
 - **Run tests** before packaging
 - **Build a Docker image**
